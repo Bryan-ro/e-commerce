@@ -1,4 +1,5 @@
-import { IsString, IsEmail, IsIdentityCard, IsNotEmpty, IsPhoneNumber, IsStrongPassword } from "class-validator";
+import { IsString, IsEmail, IsNotEmpty, IsPhoneNumber, IsStrongPassword, Validate } from "class-validator";
+import { IsCpfValidConstraint } from "../../configs/validations/IsValidCpf";
 
 export class CreateUserDto {
     @IsNotEmpty()
@@ -7,19 +8,16 @@ export class CreateUserDto {
     
     @IsNotEmpty()
     @IsString()    
-        user!: string;
+        username!: string;
 
-    @IsIdentityCard()
+    @Validate(IsCpfValidConstraint)
         cpf!: string;
         
     @IsEmail()    
         email!: string;
 
-    @IsNotEmpty()
-        role!: "CUSTOMER" | "MANAGER" | "EMPLOYEE";
-
-    @IsPhoneNumber()
-        tel!: string;
+    @IsPhoneNumber("BR")
+        phone!: string;
 
     @IsStrongPassword({
         minLength: 8,

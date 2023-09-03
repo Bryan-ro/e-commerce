@@ -20,6 +20,18 @@ export class ValidationConfig {
             });
         }
 
-        return { errors: constraints, statusCode: 400 };
+        const concatInOneArray: string[] = [];
+
+        for(const i in constraints) {
+            concatInOneArray.push(constraints[i][0]);
+        }
+
+        const errorsArray: string[] = [];
+        
+        for (const i in concatInOneArray) {
+            errorsArray.push(concatInOneArray[i]);
+        }
+
+        return { errors: errorsArray };
     }
 }

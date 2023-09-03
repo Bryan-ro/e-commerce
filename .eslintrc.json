@@ -15,7 +15,8 @@
         "sourceType": "module"
     },
     "plugins": [
-        "@typescript-eslint"
+        "@typescript-eslint",
+        "import"
     ],
     "rules": {
         "indent": [
@@ -35,6 +36,8 @@
             "always"
         ],
         "object-curly-spacing": 
-        ["error", "always"]
+        ["error", "always"],
+        "import/order": 
+        ["error", { "groups": [["builtin", "external"], "internal", ["parent", "sibling", "index"]] }]
     }
 }

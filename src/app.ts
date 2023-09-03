@@ -1,7 +1,15 @@
 import express from "express";
+import { ErrorHandler } from "./errors/ErrorHandler";
+import "express-async-errors";
+import { router } from "./router/router";
 
 const app = express();
 app.use(express.json());
+app.use(router);
+app.use(ErrorHandler);
 
-const port = process.env.PORT || 4444;
-app.listen(port, () => console.log(`Server listening on port: ${port}`));
+app.get("/", (req, res) => {
+    res.send("Ola");
+});
+
+export default app;
