@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
+import { hash } from "bcrypt";
 import { CreateUserDto } from "../../dto/user/CreateUserDto";
-import { BCryptConfig } from "../../security/BCryptConfig";
 
 const prisma = new PrismaClient();
 
@@ -14,7 +14,7 @@ export class UserManagerService {
                 email: user.email,
                 role: "MANAGER",
                 phone: user.phone,
-                password: await new BCryptConfig().hashPass(user.password)
+                password: await hash(user.password, 15)
             }
         });
 
