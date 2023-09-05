@@ -1,5 +1,5 @@
 import { IsString, IsEmail, IsNotEmpty, IsPhoneNumber, IsStrongPassword, Validate } from "class-validator";
-import { IsCpfValidConstraint } from "../../configs/validations/IsValidCpf";
+import { IsCpfValidConstraint } from "../../validations/IsValidCpf";
 
 export class CreateUserDto {
     @IsNotEmpty()
