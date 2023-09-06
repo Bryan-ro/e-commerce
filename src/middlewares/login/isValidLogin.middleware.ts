@@ -1,8 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response, NextFunction } from "express";
 import { compare } from "bcrypt";
-import { LoginDto } from "../../../dto/user/LoginDto";
-import { AppError } from "../../../errors/AppError";
+import { LoginDto } from "../../dto/user/LoginDto";
+import { AppError } from "../../errors/AppError";
 
 const prisma = new PrismaClient();
 

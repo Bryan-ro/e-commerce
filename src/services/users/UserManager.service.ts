@@ -5,6 +5,11 @@ import { CreateUserDto } from "../../dto/user/CreateUserDto";
 const prisma = new PrismaClient();
 
 export class UserManagerService {
+    public async getManagers() {
+        return { managers: await prisma.user.findMany({ select: { name: true, username: true, email: true } }), 
+            statusCode: 200 };
+    }
+
     public async create (user: CreateUserDto) {
         await prisma.user.create({
             data: {

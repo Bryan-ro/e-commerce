@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response, NextFunction } from "express";
-import { CreateUserDto } from "../../../dto/user/CreateUserDto";
-import { AppError } from "../../../errors/AppError";
+import { CreateUserDto } from "../../../../dto/user/CreateUserDto";
+import { AppError } from "../../../../errors/AppError";
 
 const prisma = new PrismaClient();
 
