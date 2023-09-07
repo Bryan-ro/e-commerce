@@ -15,7 +15,7 @@ export const isLoggedIn = async (req: Request, res: Response, next: NextFunction
         return next();  
     } catch (error) {
         if(error instanceof JsonWebTokenError) {
-            throw new AppError("Invalid token", 401);
+            throw new AppError("Invalid token", 498);
         }
     }
 };
