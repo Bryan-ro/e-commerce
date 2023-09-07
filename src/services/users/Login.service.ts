@@ -20,9 +20,10 @@ export class LoginService {
         
         const jwtgenerate = sign(
             { 
-                username: String(user?.username), 
-                email: String(user?.email), 
-                role: String(user?.role) 
+                id: user?.id,
+                username: user?.username, 
+                email: user?.email, 
+                role: user?.role 
             }, 
             String(process.env.JWT_TOKEN), 
             { 

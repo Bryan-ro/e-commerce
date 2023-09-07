@@ -5,7 +5,7 @@ import { isUserAlreadyExists } from "../../middlewares/users/universal/create/is
 import { isValidData } from "../../middlewares/users/universal/create/isValidData.middleware";
 import { isLoggedIn } from "../../middlewares/login/isLoggedIn.middleware";
 import { isManager } from "../../middlewares/users/roles/isManager.middleware";
-import { isNotYou } from "../../middlewares/users/roles/isNotYou.middleware";
+import { isNotOwnUser } from "../../middlewares/users/roles/isNotOwnUser.middleware";
 import { isUserExists } from "../../middlewares/users/universal/get/isUserExists.middleware";
 
 const service = new UserManagerService();
@@ -15,7 +15,7 @@ export class UserManagerController {
     public routes (): Router {
         router.get("/get-managers", isLoggedIn, isManager, this.getManagers);
         router.post("/create", isValidData, isUserAlreadyExists, this.create);
-        router.delete("/delete/:id", isLoggedIn, isManager, isUserExists, isNotYou, this.delete);
+        router.delete("/delete/:id", isLoggedIn, isManager, isUserExists, isNotOwnUser, this.delete);
         
         return router;
     }

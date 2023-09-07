@@ -4,7 +4,7 @@ import { AppError } from "../../../errors/AppError";
 
 const prisma = new PrismaClient();
 
-export const isNotYou = async (req: Request, res: Response, next: NextFunction) => {
+export const isNotOwnUser = async (req: Request, res: Response, next: NextFunction) => {
     const payload = req.loginPayload;
     const id = Number(req.params.id);
     

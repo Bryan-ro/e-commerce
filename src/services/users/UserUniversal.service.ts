@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 
 export class UserUniversalService {
     public async getOneUser(id: number) {
-        const manager = await prisma.user.findUnique({ 
+        const user = await prisma.user.findUnique({ 
             where: { 
                 id: id 
             }, 
@@ -21,7 +21,25 @@ export class UserUniversalService {
             } 
         });
 
-        return { ...manager, statusCode: 200 };
+        return { ...user, statusCode: 200 };
+    }
+
+    public async getOwnUser (id: number) {
+        const ownUser = await prisma.user.findUnique({
+            where: {
+                id
+            },
+            select: {
+                id: true,
+                name: true,
+                username: true,
+                email: true,
+                phone: true,
+                cpf: true
+            }
+        });
+
+        return { ...ownUser, statusCode: 200 };
     }
 
     public async updatePersonalData (id: number, data: UpdatePersonalDataDto) {
