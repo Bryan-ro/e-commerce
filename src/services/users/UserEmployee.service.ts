@@ -4,12 +4,7 @@ import { CreateUserDto } from "../../dto/user/CreateUserDto";
 
 const prisma = new PrismaClient();
 
-export class UserManagerService {
-    public async getManagers() {
-        return { managers: await prisma.user.findMany({ select: { id: true, name: true, username: true, email: true } }), 
-            statusCode: 200 };
-    }
-
+export class UserEmployeeService {
     public async create (user: CreateUserDto) {
         await prisma.user.create({
             data: {
@@ -17,18 +12,12 @@ export class UserManagerService {
                 username: user.username,
                 cpf: user.cpf,
                 email: user.email,
-                role: "MANAGER",
+                role: "EMPLOYEE",
                 phone: user.phone,
                 password: await hash(user.password, 15)
             }
         });
 
-        return { message: "User created successfully, go to login page.", statusCode: 201 };
-    }
-
-    public async deleteManager (id: number) {
-        await prisma.user.delete({ where: { id } });
-
-        return { message: "Manager successfully deleted", statusCode: 200 };
+        return { message: "Employee created successfully", statusCode: 201 };
     }
 }

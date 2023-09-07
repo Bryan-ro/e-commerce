@@ -5,13 +5,16 @@ import { ValidatorConstraint, ValidatorConstraintInterface, ValidationArguments 
 export class IsCpfValidConstraint implements ValidatorConstraintInterface {
     validate(cpf: string, _args: ValidationArguments) {
 
-        cpf = cpf.replace(/\D/g, "");
-
-        if (cpf.length !== 11) {
+        if(!cpf) {
             return false;
         }
+        
+        const formatCpf = cpf.replace(/[., -]/g, "");
+        const regex = /^\d{11}$/;
 
-        return true;
+        const test = regex.test(formatCpf);
+
+        return test;
     }
 
     defaultMessage(_args: ValidationArguments) {

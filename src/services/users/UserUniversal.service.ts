@@ -7,14 +7,12 @@ const prisma = new PrismaClient();
 
 export class UserUniversalService {
     public async getOneUser(id: number) {
-        const manager = await prisma.user.findFirst({ 
+        const manager = await prisma.user.findUnique({ 
             where: { 
-                AND: [
-                    { id: id },
-                    { role: "MANAGER" }
-                ]
+                id: id 
             }, 
             select: { 
+                id: true,
                 name: true,
                 username: true,
                 email: true,
