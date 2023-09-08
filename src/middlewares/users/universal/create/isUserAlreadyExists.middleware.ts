@@ -25,4 +25,3 @@ export const isUserAlreadyExists = async (req: Request, res: Response, next: Nex
 
     return next();
 };
-

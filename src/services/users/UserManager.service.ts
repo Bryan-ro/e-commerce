@@ -25,10 +25,4 @@ export class UserManagerService {
 
         return { message: "User created successfully, go to login page.", statusCode: 201 };
     }
-
-    public async deleteManager (id: number) {
-        await prisma.user.delete({ where: { id } });
-
-        return { message: "Manager successfully deleted", statusCode: 200 };
-    }
 }

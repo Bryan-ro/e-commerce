@@ -60,4 +60,10 @@ export class UserUniversalService {
 
         return { message: "Personal data successfully updated", statusCode: 200 };
     }
+
+    public async deleteUser (id: number) {
+        await prisma.user.delete({ where: { id } });
+
+        return { message: "Manager successfully deleted", statusCode: 200 };
+    }
 }

@@ -6,7 +6,7 @@ env.config();
 
 export const isLoggedIn = async (req: Request, res: Response, next: NextFunction) => {
     const jwtToken = String(req.headers.token);
-
+    
     try {
         const payload = verify(jwtToken, String(process.env.JWT_TOKEN));
 
