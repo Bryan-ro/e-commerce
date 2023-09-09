@@ -16,7 +16,8 @@ export class UserUniversalController {
         router.get("/get-user/:id", isLoggedIn, isManager, isUserExists, this.getOneUser);
         router.get("/get-own-profile", isLoggedIn, this.getOwnUser);
         router.put("/update-personal-data", isLoggedIn, isNotEmployee, isValidDataPersonalUpdate, this.updatePersonalData);
-        router.delete("/delete/:id", isLoggedIn, isManager, isUserExists, isNotOwnUser, this.delete);
+        router.put("/disable/:id", isLoggedIn, isManager, isUserExists, isNotOwnUser, this.disable);
+        router.put("/active/:id", isLoggedIn, isManager, isUserExists, this.active);
 
         return router;
     }
@@ -47,11 +48,19 @@ export class UserUniversalController {
         return res.status(update.statusCode).json({ ...update });
     } 
 
-    private async delete (req: Request, res: Response) {
+    private async disable (req: Request, res: Response) {
         const id = Number(req.params.id);
 
-        const deleteUser = await service.deleteUser(id);
+        const disableUser = await service.disableUser(id);
 
-        return res.status(deleteUser.statusCode).json({ ...deleteUser });
+        return res.status(disableUser.statusCode).json({ ...disableUser });
+    }
+
+    private async active (req: Request, res: Response) {
+        const id = Number(req.params.id);
+
+        const activeUser = await service.activeUser(id);
+
+        return res.status(activeUser.statusCode).json({ ...activeUser });
     }
 }

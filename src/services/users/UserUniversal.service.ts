@@ -53,7 +53,7 @@ export class UserUniversalService {
                 name: data.name ?? user?.name,
                 username: data.username ?? user?.username,
                 cpf: data.cpf ?? user?.cpf,
-                email: data.cpf ?? user?.email,
+                email: data.email ?? user?.email,
                 phone: data.phone ?? user?.phone
             }
         });
@@ -61,9 +61,30 @@ export class UserUniversalService {
         return { message: "Personal data successfully updated", statusCode: 200 };
     }
 
-    public async deleteUser (id: number) {
-        await prisma.user.delete({ where: { id } });
+    public async disableUser (id: number) {
+        await prisma.user.update({
+            where: {
+                id
+            },
+            data: {
+                isActive: false
+            }
+        });
 
         return { message: "Manager successfully deleted", statusCode: 200 };
     }
+
+    public async activeUser (id: number) {
+        await prisma.user.update({
+            where: {
+                id
+            },
+            data: {
+                isActive: true
+            }
+        });
+
+        return { message: "User reactivated", statusCode: 200 };
+    }
+
 }

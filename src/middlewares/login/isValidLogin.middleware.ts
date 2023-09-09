@@ -21,9 +21,13 @@ export const isValidLogin = async (req: Request, res: Response, next: NextFuncti
     });
 
     const isValidPassword = await compare(data.password, String(user?.password));
-
+    
     if(!isValidPassword) {
         throw new AppError("Invalid user or password", 401);
+    }
+
+    if(!user?.isActive) {
+        throw new AppError("Your user has been deactivated. For more information, please contact our support team.", 401);
     }
     
     return next();

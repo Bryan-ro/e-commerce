@@ -19,6 +19,7 @@ model User {
   role     roles @default(CUSTOMER)
   phone      String @db.VarChar(15) @unique
   password String
+  isActive Boolean @default(true)
   addresses Address[]
   credits CreditCard[]
   orderItems OrderItem[]

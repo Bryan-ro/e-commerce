@@ -12,7 +12,7 @@ const router = Router();
 export class UserManagerController {
     public routes (): Router {
         router.get("/get-managers", isLoggedIn, isManager, this.getManagers);
-        router.post("/create", isValidData, isUserAlreadyExists, this.create);
+        router.post("/create", isLoggedIn, isManager, isValidData, isUserAlreadyExists, this.create);
         
         return router;
     }
