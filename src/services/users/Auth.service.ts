@@ -4,6 +4,7 @@ import { hash } from "bcrypt";
 import memoryCache from "memory-cache";
 import env from "dotenv";
 import  recoveryPassMail from "../../mail/recoveryPassMail";
+import { RecoveryPassDto } from "../../dto/user/RecoveryPassDto";
 env.config();
 
 const prisma = new PrismaClient();
@@ -52,21 +53,25 @@ export class LoginService {
 
         const authCode = (Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000).toString();
 
-        memoryCache.put(user?.id,  authCode, 300000);
+        memoryCache.put(authCode, user?.id, 300000);
 
         await recoveryPassMail(authCode, String(user?.name), String(user?.email));
 
         return { message: "Your verification code has been sent to your email.", statusCode: 200 };
     }
 
-    public async forgotPassword (id: number, password: string) {
+    public async forgotPasswordChange (data: RecoveryPassDto) {
+        const userId = memoryCache.get(data.verificationCode);
+        
         await prisma.user.update({
-            where: { id },
+            where: { id: userId },
             data: {
-                password: await  hash(password, 15)
+                password: await  hash(data.password, 15)
             }
         });
 
+        memoryCache.del(data.verificationCode);
+        
         return { message: "Password successfully changed", statusCode: 200 };
     }
 }
