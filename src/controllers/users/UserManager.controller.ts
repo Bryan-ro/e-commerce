@@ -11,16 +11,9 @@ const router = Router();
 
 export class UserManagerController {
     public routes (): Router {
-        router.get("/get-managers", isLoggedIn, isManager, this.getManagers);
         router.post("/create", isLoggedIn, isManager, isValidData, isUserAlreadyExists, this.create);
         
         return router;
-    }
-
-    private async getManagers (req: Request, res: Response){
-        const managers = await service.getManagers();
-
-        return res.status(managers.statusCode).json({ ...managers });
     }
 
     private async create (req: Request, res: Response) {

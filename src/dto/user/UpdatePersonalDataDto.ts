@@ -1,14 +1,14 @@
-import { IsString, IsEmail, IsNotEmpty, IsPhoneNumber, Validate, IsOptional } from "class-validator";
+import { IsString, IsEmail, IsPhoneNumber, Validate, IsOptional, Length } from "class-validator";
 import { IsCpfValidConstraint } from "../../validations/IsValidCpf";
 
 export class UpdatePersonalDataDto {
     @IsOptional()
-    @IsNotEmpty()
+    @Length(5, 200)
     @IsString()
         name?: string;
     
     @IsOptional()
-    @IsNotEmpty()
+    @Length(5, 30)
     @IsString()    
         username?: string;
     

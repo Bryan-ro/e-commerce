@@ -1,12 +1,12 @@
-import { IsString, IsEmail, IsNotEmpty, IsPhoneNumber, IsStrongPassword, Validate } from "class-validator";
+import { IsString, IsEmail, IsPhoneNumber, IsStrongPassword, Validate, Length } from "class-validator";
 import { IsCpfValidConstraint } from "../../validations/IsValidCpf";
 
 export class CreateUserDto {
-    @IsNotEmpty()
+    @Length(5, 200)
     @IsString()
         name!: string;
     
-    @IsNotEmpty()
+    @Length(5, 30)
     @IsString()    
         username!: string;
 
