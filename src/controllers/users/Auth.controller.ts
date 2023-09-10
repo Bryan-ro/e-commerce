@@ -21,7 +21,10 @@ export class LoginController {
     }
 
     private async login (req: Request, res: Response) {
-        const user: LoginDto = req.body;
+        const user: LoginDto = {
+            login: req.headers["login"] as string,
+            password: req.headers["password"] as string
+        };
 
         const login = await service.login(user.login);
 

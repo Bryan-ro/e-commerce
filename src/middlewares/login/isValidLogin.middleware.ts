@@ -7,7 +7,10 @@ import { AppError } from "../../errors/AppError";
 const prisma = new PrismaClient();
 
 export const isValidLogin = async (req: Request, res: Response, next: NextFunction) => {
-    const data: LoginDto = req.body;
+    const data: LoginDto = {
+        login: req.headers["login"] as string,
+        password: req.headers["password"] as string
+    };
     
     const user = await prisma.user.findFirst({
         where: {
