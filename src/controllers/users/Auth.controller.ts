@@ -1,5 +1,4 @@
 import { Request, Response, Router } from "express";
-import { LoginDto } from "../../dto/user/LoginDto";
 import { isValidData } from "../../middlewares/login/isValidData.middleware";
 import { isValidDataForRecovery } from "../../middlewares/login/forgotPass/isValidDataForRecovery.middleware";
 import { isValidLogin } from "../../middlewares/login/isValidLogin.middleware";
@@ -21,12 +20,7 @@ export class LoginController {
     }
 
     private async login (req: Request, res: Response) {
-        const user: LoginDto = {
-            login: req.headers["login"] as string,
-            password: req.headers["password"] as string
-        };
-
-        const login = await service.login(user.login);
+        const login = await service.login(req.userLogin as string);
 
         return res.status(login.statusCode).json({ ...login });
     }
