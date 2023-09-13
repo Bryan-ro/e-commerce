@@ -20,11 +20,11 @@ export class CreateUserDto {
         phone!: string;
 
     @IsStrongPassword({
-        minLength: 8,
+        minLength: 6,
         minUppercase: 1,
         minNumbers: 1,
-        minSymbols: 1,
-        minLowercase: 1
+        minLowercase: 1,
+        minSymbols: 0
     })
         password!: string;
 }
