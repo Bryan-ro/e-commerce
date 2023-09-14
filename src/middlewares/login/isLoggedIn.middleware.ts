@@ -7,7 +7,7 @@ env.config();
 const prisma = new PrismaClient();
 
 export const isLoggedIn = async (req: Request, res: Response, next: NextFunction) => {
-    const jwtToken = String(req.headers.token);
+    const jwtToken = String(req.headers["authorization"]).replace("Bearer ", "");
     
     try {
         const payload = verify(jwtToken, String(process.env.JWT_TOKEN));

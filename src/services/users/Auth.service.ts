@@ -31,7 +31,7 @@ export class LoginService {
             }, 
             String(process.env.JWT_TOKEN), 
             { 
-                expiresIn: "1h"
+                expiresIn: "1h"  
             });
 
 
