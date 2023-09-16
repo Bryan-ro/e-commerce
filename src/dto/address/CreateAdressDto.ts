@@ -27,8 +27,4 @@ export class CreateAddressDto  {
     @IsOptional()
     @IsString()
     readonly complement!: string;
-    
-    @IsNotEmpty()
-    @IsInt()
-    readonly userId!: number;
 }

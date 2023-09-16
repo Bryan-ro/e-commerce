@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import maps from "@google/maps";
 import env from "dotenv";
+import { AppError } from "../../errors/AppError";
 import { CreateAddressDto } from "../../dto/address/CreateAdressDto";
 
 env.config();
@@ -11,26 +12,17 @@ const client = maps.createClient({
 
 export const isAddressExists = async (req: Request, res: Response, next: NextFunction) => {
     const data: CreateAddressDto = req.body;
-
-    const validatin = client.geocode({
+    
+    client.geocode({
         address: data.cep
     }, (err, response) => {
-        if(!err && response.json.results.length > 0) {
-            // const address = response.json.results[0].address_components;
-        
-
-
-            // const postalCodeValidation: boolean = address.find((postalCode) => {
-            //     if(!(postalCode.types.find(p => p === "sublocality") === ) {
-            //         return false;
-            //     }
-
-            //     return true;
-            // });
-
-        
+        if(err || response.json.results.length == 0) {
+            return next(new AppError("Invalid address"));
         }
+
+        return next();
     });
+
 };
 
 
