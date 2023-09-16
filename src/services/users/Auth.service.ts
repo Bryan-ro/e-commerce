@@ -39,21 +39,21 @@ export class LoginService {
     }
 
 
-    public async requestForgotPassword (login: string) {
-        const user = await prisma.user.findFirst({
+    public async requestForgotPassword (email: string) {
+        const isAlreadyActiveToken = memoryCache.get(email);
+
+        if(isAlreadyActiveToken) {
+            return { message: "A verification code has already been sent to your email. Wait a few minutes to send another.", statusCode: 400 };
+        }
+
+        const user = await prisma.user.findUnique({
             where: {
-                OR: [
-                    { email: login },
-                    { cpf: login },
-                    { username: login },
-                    { phone: login }
-                ]
+                email: email
             }
         });
 
         const authCode = (Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000).toString();
-
-        memoryCache.put(authCode, user?.id, 300000);
+        memoryCache.put(user?.email, authCode, 300000);
 
         await recoveryPassMail(authCode, String(user?.name), String(user?.email));
 
@@ -61,16 +61,22 @@ export class LoginService {
     }
 
     public async forgotPasswordChange (data: RecoveryPassDto) {
-        const userId = memoryCache.get(data.verificationCode);
-        
+        const user = await prisma.user.findFirst({
+            where: {
+                email: data.login
+            },
+            select: { id: true }
+        });
+
+
         await prisma.user.update({
-            where: { id: userId },
+            where: { id: user?.id },
             data: {
                 password: await  hash(data.password, 15)
             }
         });
 
-        memoryCache.del(data.verificationCode);
+        memoryCache.del(data.login);
         
         return { message: "Password successfully changed", statusCode: 200 };
     }

@@ -6,6 +6,7 @@ import { LoginService } from "../../services/users/Auth.service";
 import { isUserExists } from "../../middlewares/login/forgotPass/isUserExists.middleware";
 import { RecoveryPassDto } from "../../dto/user/RecoveryPassDto";
 import { isvalidCode } from "../../middlewares/login/forgotPass/isValidCode.middleware";
+import { isValidDataForRecoveryPassRequest } from "../../middlewares/login/forgotPass/isValidDataForRecoveryPassRequest.middleware";
 
 const service = new LoginService();
 const router = Router();
@@ -13,7 +14,7 @@ const router = Router();
 export class LoginController {
     public routes () {
         router.post("/", isValidData, isValidLogin, this.login);
-        router.post("/forgot-password/:login", isUserExists, this.requestForgotPassword);
+        router.post("/forgot-password/:login", isValidDataForRecoveryPassRequest, isUserExists, this.requestForgotPassword);
         router.patch("/recovery-password", isValidDataForRecovery, isvalidCode, this.forgotPasswordChange);
         
         return router;
@@ -26,9 +27,9 @@ export class LoginController {
     }
 
     private async requestForgotPassword (req: Request, res: Response) {
-        const login = req.params.login;
+        const email = req.params.login;
 
-        const requestCode = await service.requestForgotPassword(login);
+        const requestCode = await service.requestForgotPassword(email);
 
         return res.status(requestCode.statusCode).json({ ...requestCode });
     }

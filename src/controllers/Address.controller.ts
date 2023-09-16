@@ -10,9 +10,18 @@ const router = Router();
 
 export class AddressController {
     public routes () {
+        router.get("/", isLoggedIn, this.getOwnAddress);
         router.post("/create", isLoggedIn, isValidData,  isAddressExists, this.create);
 
         return router;
+    }
+
+    private async getOwnAddress (req: Request, res: Response) {
+        const userId = req.loginPayload.id;
+
+        const address = await service.getOwnAddress(userId);
+
+        return res.status(res.statusCode).json({ ...address });
     }
 
     private async create (req: Request, res: Response) {

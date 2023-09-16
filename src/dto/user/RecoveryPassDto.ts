@@ -1,8 +1,7 @@
-import { IsString, IsNotEmpty, IsStrongPassword } from "class-validator";
+import { IsString, IsNotEmpty, IsStrongPassword, IsEmail } from "class-validator";
 
 export class RecoveryPassDto {
-    @IsNotEmpty()
-    @IsString() 
+    @IsEmail()
     readonly login!: string;
 
     @IsNotEmpty()
