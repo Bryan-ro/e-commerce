@@ -32,4 +32,14 @@ export class AddressService {
 
         return { message: "Address successfully created", statusCode: 201 };
     }
+
+    public async deleteAddress (addressId: number) {
+        await prisma.address.delete({
+            where: {
+                id: addressId
+            }
+        });
+        
+        return { message: "Address sucessfully deleted", statusCode: 200 };
+    }
 }

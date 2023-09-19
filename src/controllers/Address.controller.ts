@@ -2,8 +2,10 @@ import { Request, Response, Router } from "express";
 import { AddressService } from "../services/Address.service";
 import { CreateAddressDto } from "../dto/address/CreateAdressDto";
 import { isLoggedIn } from "../middlewares/login/isLoggedIn.middleware";
-import { isAddressExists } from "../middlewares/address/isAddressExists.middleware";
+import { isValidAddress } from "../middlewares/address/isValidAddress.middleware";
 import { isValidData } from "../middlewares/address/isValidData.middleware";
+import { isAddressExists } from "../middlewares/address/isAddressExists.middleware";
+import { isAddressBelongsToUser } from "../middlewares/address/isAddressBelongsToUser.middleware";
 
 const service = new AddressService();
 const router = Router();
@@ -11,7 +13,8 @@ const router = Router();
 export class AddressController {
     public routes () {
         router.get("/", isLoggedIn, this.getOwnAddress);
-        router.post("/create", isLoggedIn, isValidData,  isAddressExists, this.create);
+        router.post("/create", isLoggedIn, isValidData,  isValidAddress, this.create);
+        router.delete("/delete/:id", isLoggedIn, isAddressExists, isAddressBelongsToUser, this.delete);
 
         return router;
     }
@@ -31,5 +34,13 @@ export class AddressController {
         const creation = await service.create(data, id);
 
         return res.status(creation.statusCode).json({ ...creation });
+    }
+
+    private async delete (req: Request, res: Response) {
+        const id = +req.params.id;
+
+        const deleteAdrress = await service.deleteAddress(id);
+
+        return res.status(deleteAdrress.statusCode).json({ ...deleteAdrress });
     }
 }

@@ -1,49 +1,21 @@
 import { Request, Response, NextFunction } from "express";
-import maps from "@google/maps";
-import env from "dotenv";
+import { PrismaClient } from "@prisma/client";
 import { AppError } from "../../errors/AppError";
-import { CreateAddressDto } from "../../dto/address/CreateAdressDto";
 
-env.config();
-
-const client = maps.createClient({
-    key: `${process.env.GOOGLE_MAPS_KEY}`
-});
+const prisma = new PrismaClient();
 
 export const isAddressExists = async (req: Request, res: Response, next: NextFunction) => {
-    const data: CreateAddressDto = req.body;
-    
-    client.geocode({
-        address: data.cep
-    }, (err, response) => {
-        if(err || response.json.results.length == 0) {
-            return next(new AppError("Invalid address"));
+    const id = +req.params.id;
+
+    const address = await prisma.address.findUnique({
+        where: {
+            id: id
         }
-
-        return next();
     });
-
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-// export default (() => {
-//     client.geocode({
-//         address: ""
-//     }, function(err, response) {
-//         if (!err) {
-//             console.log(response.json.results);
-//         }
-//     });
     
-// })();
+    if(!address) {
+        throw new AppError("Address does not exist", 400);
+    }
+
+    return next();
+};
