@@ -8,8 +8,4 @@ app.use(express.json());
 app.use(router);
 app.use(ErrorHandler);
 
-app.get("/", (req, res) => {
-    res.json({ message: "You are gay e viadão tbm" });
-});
-
 export default app;

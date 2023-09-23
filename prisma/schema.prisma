@@ -20,6 +20,7 @@ model User {
   phone      String @db.VarChar(15) @unique
   password String
   isActive Boolean @default(true)
+  asaasId String @unique
   addresses Address[]
   credits CreditCard[]
   orderItems OrderItem[]

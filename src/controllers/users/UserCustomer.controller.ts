@@ -1,10 +1,10 @@
 import { Request, Response, Router } from "express";
 import { CreateUserDto } from "../../dto/user/CreateUserDto";
-import { UserEmployeeService } from "../../services/users/UserEmployee.service";
+import { UserCustomerService } from "../../services/users/UserCustomer.service";
 import { isValidData } from "../../middlewares/users/universal/create/isValidData.middleware";
 import { isUserAlreadyExists } from "../../middlewares/users/universal/create/isUserAlreadyExists.middleware";
 
-const service = new UserEmployeeService();
+const service = new UserCustomerService();
 const router = Router();
 
 
