@@ -1,7 +1,45 @@
-// import { PrismaClient } from "@prisma/client";
-// import axios from "axios";
-// import { CreateAddressDto } from "../dto/address/CreateAdressDto";
+import { PrismaClient } from "@prisma/client";
+import { TokenizeCardDto } from "../dto/creditCard/TokenizeCardDto";
+import { AsaasMethods } from "../asaasMethods/AsaasMethods";
 
-// export class CreditCard {
-    
-// }
+const prisma = new PrismaClient();
+const asaas = new AsaasMethods();
+
+export class CreditCardService {
+    public async createCard(data: TokenizeCardDto, userId: number, ip: string) {
+        const user = await prisma.user.findUnique({ 
+            where: { 
+                id: userId 
+            },
+            include: {
+                addresses: true
+            }
+        });
+
+        if(user) {
+            const cardToken = await asaas.tokenizeCard({
+                customer: user.asaasId,
+                creditCard: data,
+                creditCardHolderInfo: {
+                    name: user.name,
+                    email: user.email,
+                    cpfCnpj: user.cpf,
+                    phone: user.phone,
+                    postalCode: user.addresses[0].cep,
+                    addressNumber: (user.addresses[0].number).toString(),
+                    addressComplement: user.addresses[0].complement
+                },
+                remoteIp: ip
+            });
+
+            await prisma.creditCard.create({
+                data: {
+                    cardToken: cardToken,
+                    userId: userId
+                }
+            });
+        }      
+        
+        return { message: "Credit card successfully created", statusCode: 201 };
+    }
+}

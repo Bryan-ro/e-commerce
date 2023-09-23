@@ -43,11 +43,7 @@ model Address {
 
 model CreditCard {
   id          Int     @id @default(autoincrement())
-  card_number String
-  name        String
-  validity    DateTime
-  cvv         Int
-  cpf         String
+  cardToken String @unique
   userId      Int
   user        User     @relation(fields: [userId], references: [id])
 
