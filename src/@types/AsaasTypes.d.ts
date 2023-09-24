@@ -6,7 +6,7 @@ declare namespace AsaasTypes {
             number: string;
             expiryMonth: string;
             expiryYear: string;
-            cvv: string;
+            ccv: string;
         },
         creditCardHolderInfo: {
             name: string,

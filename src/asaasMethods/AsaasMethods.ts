@@ -37,9 +37,12 @@ export class AsaasMethods {
         });
 
         if(tokenize.status !== 200) {
-            throw new AppError("Failed to create client", tokenize.status);
+            console.log(await tokenize.json());
+            throw new AppError("Failed to create card", tokenize.status);
         }
-        console.log(await tokenize.json());
-        return await tokenize.json(); 
+        
+        const json = await tokenize.json();
+        
+        return json; 
     }
 }

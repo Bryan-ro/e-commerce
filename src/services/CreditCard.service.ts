@@ -2,6 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { TokenizeCardDto } from "../dto/creditCard/TokenizeCardDto";
 import { AsaasMethods } from "../asaasMethods/AsaasMethods";
 
+
 const prisma = new PrismaClient();
 const asaas = new AsaasMethods();
 
@@ -16,6 +17,7 @@ export class CreditCardService {
             }
         });
 
+        console.log("Passou pelo usuario");
         if(user) {
             const cardToken = await asaas.tokenizeCard({
                 customer: user.asaasId,
@@ -32,9 +34,10 @@ export class CreditCardService {
                 remoteIp: ip
             });
 
+            console.log("Passou pelo card");
             await prisma.creditCard.create({
                 data: {
-                    cardToken: cardToken,
+                    cardToken: cardToken.creditCardToken,
                     userId: userId
                 }
             });

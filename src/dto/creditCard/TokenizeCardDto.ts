@@ -18,6 +18,6 @@ export class TokenizeCardDto {
 
     @IsNumberString()
     @Length(3, 3)
-    readonly cvv!: string; 
+    readonly ccv!: string; 
 }
 
