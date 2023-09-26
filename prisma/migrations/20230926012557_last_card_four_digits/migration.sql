@@ -8,10 +8,14 @@ CREATE TABLE `users` (
     `role` ENUM('CUSTOMER', 'MANAGER', 'EMPLOYEE') NOT NULL DEFAULT 'CUSTOMER',
     `phone` VARCHAR(15) NOT NULL,
     `password` VARCHAR(191) NOT NULL,
+    `isActive` BOOLEAN NOT NULL DEFAULT true,
+    `asaasId` VARCHAR(191) NOT NULL,
 
     UNIQUE INDEX `users_username_key`(`username`),
     UNIQUE INDEX `users_cpf_key`(`cpf`),
     UNIQUE INDEX `users_email_key`(`email`),
+    UNIQUE INDEX `users_phone_key`(`phone`),
+    UNIQUE INDEX `users_asaasId_key`(`asaasId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -33,13 +37,10 @@ CREATE TABLE `Address` (
 -- CreateTable
 CREATE TABLE `credit_cards` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `card_number` VARCHAR(191) NOT NULL,
-    `name` VARCHAR(191) NOT NULL,
-    `validity` DATETIME(3) NOT NULL,
-    `cvv` INTEGER NOT NULL,
-    `cpf` VARCHAR(191) NOT NULL,
+    `cardToken` VARCHAR(191) NOT NULL,
     `userId` INTEGER NOT NULL,
 
+    UNIQUE INDEX `credit_cards_cardToken_key`(`cardToken`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

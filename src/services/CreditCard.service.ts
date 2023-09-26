@@ -33,9 +33,13 @@ export class CreditCardService {
                 remoteIp: ip
             });
 
+            const lastDigits = `
+            ${data.number[data.number.length - 1]}${data.number[data.number.length - 2]}${data.number[data.number.length - 3]}${data.number[data.number.length - 4]}`;
+
             await prisma.creditCard.create({
                 data: {
-                    cardToken: cardToken.creditCardToken,
+                    cardToken: cardToken.creditCardToken, 
+                    lastCardDigits: lastDigits,
                     userId: userId
                 }
             });

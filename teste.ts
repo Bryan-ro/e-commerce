@@ -1,10 +1,10 @@
-// import axios from "axios";
+import axios from "axios";
 import { hash } from "bcrypt";
 
 
-(async () => {
-    console.log(await hash("Inicialacbb4", 15)); 
-})();
+// (async () => {
+//     console.log(await hash("Inicialacbb4", 15)); 
+// })();
 
 // const options1 = {
 //     method: "POST",
@@ -75,23 +75,23 @@ import { hash } from "bcrypt";
 //     });
 
 
-// const options = {
-//     method: "GET",
-//     url: "https://sandbox.asaas.com/api/v3/customers",
-//     headers: {
-//         accept: "application/json",
-//         access_token: "$aact_YTU5YTE0M2M2N2I4MTliNzk0YTI5N2U5MzdjNWZmNDQ6OjAwMDAwMDAwMDAwMDAwNjU5NDY6OiRhYWNoXzUwZDY4ODg4LTVmNTItNDEyNS05ZjA3LTVmNGViYjExNDA3ZA=="
-//     }
-// };
+const options = {
+    method: "GET",
+    url: "https://sandbox.asaas.com/api/v3/customers",
+    headers: {
+        accept: "application/json",
+        access_token: "$aact_YTU5YTE0M2M2N2I4MTliNzk0YTI5N2U5MzdjNWZmNDQ6OjAwMDAwMDAwMDAwMDAwNjU5NDY6OiRhYWNoXzUwZDY4ODg4LTVmNTItNDEyNS05ZjA3LTVmNGViYjExNDA3ZA=="
+    }
+};
   
-// axios
-//     .request(options)
-//     .then(function (response) {
-//         console.log(response.data);
-//     })
-//     .catch(function (error) {
-//         console.error(error);
-//     });
+axios
+    .request(options)
+    .then(function (response) {
+        console.log(response.data);
+    })
+    .catch(function (error) {
+        console.error(error);
+    });
 
 
 //cus_000005439599
@@ -149,3 +149,4 @@ import { hash } from "bcrypt";
 
 // creditCardToken: '740781ae-4c22-4b02-bbd5-7a3d4141c871'
 // pay_7396008110725249
+

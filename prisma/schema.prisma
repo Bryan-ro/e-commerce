@@ -43,7 +43,8 @@ model Address {
 
 model CreditCard {
   id          Int     @id @default(autoincrement())
-  cardToken String @unique
+  cardToken String
+  lastCardDigits String
   userId      Int
   user        User     @relation(fields: [userId], references: [id])
 
