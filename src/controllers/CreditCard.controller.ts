@@ -4,13 +4,14 @@ import { TokenizeCardDto } from "../dto/creditCard/TokenizeCardDto";
 import { isLoggedIn } from "../middlewares/login/isLoggedIn.middleware";
 import { isValidData } from "../middlewares/creditCard/isValidData.middleware";
 import { isUserHasAddress } from "../middlewares/creditCard/isUserHasAddress.middleware";
+import { isCreditCardAlreadyExistsInTheSameUser } from "../middlewares/creditCard/isCreditCardAlreadyExistsInTheSameUser.middleware";
 
 const service = new CreditCardService();
 const router = Router();
 
 export class CreditCardController {
     public routes () {  
-        router.post("/create", isLoggedIn, isUserHasAddress, isValidData, this.createCreditCard);
+        router.post("/create", isLoggedIn, isUserHasAddress, isValidData, isCreditCardAlreadyExistsInTheSameUser, this.createCreditCard);
 
         return router;
     }
