@@ -29,10 +29,11 @@ export class LoginService {
                 email: user?.email, 
                 role: user?.role 
             }, 
-            String(process.env.JWT_TOKEN), 
-            { 
-                expiresIn: "1h"  
-            });
+            String(process.env.JWT_TOKEN),
+            // { 
+            //     expiresIn: ""  
+            // }
+        );
 
 
         return { message: "User logged in successfully", token: jwtgenerate, statusCode: 200 };

@@ -2,100 +2,102 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+    provider = "mysql"
+    url      = env("DATABASE_URL")
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  name     String
-  username String      @unique
-  cpf      String   @unique
-  email    String   @unique
-  role     roles @default(CUSTOMER)
-  phone      String @db.VarChar(15) @unique
-  password String
-  isActive Boolean @default(true)
-  asaasId String @unique
-  addresses Address[]
-  credits CreditCard[]
-  orderItems OrderItem[]
+    id         Int          @id @default(autoincrement())
+    name       String
+    username   String       @unique
+    cpf        String       @unique
+    email      String       @unique
+    role       roles        @default(CUSTOMER)
+    phone      String       @unique @db.VarChar(15)
+    password   String
+    isActive   Boolean      @default(true)
+    asaasId    String       @unique
+    addresses  Address[]
+    credits    CreditCard[]
+    orderItems OrderItem[]
+    Product    Product[]
 
-  @@map("users")
+    @@map("users")
 }
 
 model Address {
-  id          Int      @id @default(autoincrement())
-  cep         String
-  state       String
-  city        String
-  neighborhood String
-  street      String
-  number      Int
-  complement  String?
-  userId      Int
-  user        User     @relation(fields: [userId], references: [id])
+    id           Int     @id @default(autoincrement())
+    cep          String
+    state        String
+    city         String
+    neighborhood String
+    street       String
+    number       Int
+    complement   String?
+    userId       Int
+    user         User    @relation(fields: [userId], references: [id])
 }
 
 model CreditCard {
-  id          Int     @id @default(autoincrement())
-  cardToken String
-  lastCardDigits String
-  userId      Int
-  user        User     @relation(fields: [userId], references: [id])
+    id             Int    @id @default(autoincrement())
+    cardToken      String
+    lastCardDigits String
+    userId         Int
+    user           User   @relation(fields: [userId], references: [id])
 
-  @@map("credit_cards")
+    @@map("credit_cards")
 }
 
 model Product {
-  id          Int      @id @default(autoincrement())
-  title       String
-  price       Float
-  description String
-  tags        Tag[]
-  images      Image[]
-  orderItems OrderItem[]
+    id          Int         @id @default(autoincrement())
+    title       String
+    price       Float
+    description String
+    createdBy   User        @relation(fields: [userId], references: [id])
+    tags        Tag[]
+    images      Image[]
+    orderItems  OrderItem[]
+    userId      Int
 
-  @@map("products")
+    @@map("products")
 }
 
 model Tag {
-  id   Int    @id @default(autoincrement())
-  tag  String @unique
-  products Product[] 
+    id       Int       @id @default(autoincrement())
+    tag      String    @unique
+    products Product[]
 
-  @@map("tags")
+    @@map("tags")
 }
 
 model Image {
-  id       Int      @id @default(autoincrement())
-  url      String   @unique
-  productId Int
-  product  Product  @relation(fields: [productId], references: [id])
+    id        Int     @id @default(autoincrement())
+    url       String  @unique
+    productId Int
+    product   Product @relation(fields: [productId], references: [id])
 
-  @@map("images")
+    @@map("images")
 }
 
 model OrderItem {
-  id         Int      @id @default(autoincrement())
-  productId  Int
-  stack      Int
-  userId     Int
-  payment_method String
-  payment_data Int
-  user       User     @relation(fields: [userId], references: [id])
-  product    Product  @relation(fields: [productId], references: [id])
+    id             Int     @id @default(autoincrement())
+    productId      Int
+    stack          Int
+    userId         Int
+    payment_method String
+    payment_data   Int
+    user           User    @relation(fields: [userId], references: [id])
+    product        Product @relation(fields: [productId], references: [id])
 
-  @@map("order_items")
+    @@map("order_items")
 }
 
 enum roles {
-  CUSTOMER
-  MANAGER
-  EMPLOYEE
+    CUSTOMER
+    MANAGER
+    EMPLOYEE
 }
-

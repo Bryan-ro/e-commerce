@@ -7,6 +7,20 @@ const prisma = new PrismaClient();
 const asaas = new AsaasMethods();
 
 export class CreditCardService {
+    public async getOwnCreditCards (userId: number) {
+        const cards = await prisma.creditCard.findMany({
+            where: {
+                userId
+            },
+            select: {
+                id: true,
+                lastCardDigits: true
+            }
+        });
+        return { cards, statusCode: 200 };
+    }
+
+
     public async createCard(data: TokenizeCardDto, userId: number, ip: string) {
         const user = await prisma.user.findUnique({ 
             where: { 
@@ -33,8 +47,7 @@ export class CreditCardService {
                 remoteIp: ip
             });
 
-            const lastDigits = `
-            ${data.number[data.number.length - 1]}${data.number[data.number.length - 2]}${data.number[data.number.length - 3]}${data.number[data.number.length - 4]}`;
+            const lastDigits = `${data.number[data.number.length - 4]}${data.number[data.number.length - 3]}${data.number[data.number.length - 2]}${data.number[data.number.length - 1]}`;
 
             await prisma.creditCard.create({
                 data: {
@@ -46,5 +59,16 @@ export class CreditCardService {
         }      
         
         return { message: "Credit card successfully created", statusCode: 201 };
+    }
+
+    public async deleteCreditCard(id: number, userId: number) {
+        await prisma.creditCard.delete({
+            where: {
+                id,
+                userId
+            }
+        });
+
+        return { message: "Credit card deleted.", statusCode: 200 };
     }
 }
