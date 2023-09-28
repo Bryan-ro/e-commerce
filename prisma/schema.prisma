@@ -53,15 +53,16 @@ model CreditCard {
 }
 
 model Product {
-    id          Int         @id @default(autoincrement())
+    id          Int            @id @default(autoincrement())
     title       String
     price       Float
     description String
-    createdBy   User        @relation(fields: [userId], references: [id])
+    userId      Int
+    status      productsStatus @default(ACTIVE)
+    createdBy   User           @relation(fields: [userId], references: [id])
     tags        Tag[]
     images      Image[]
     orderItems  OrderItem[]
-    userId      Int
 
     @@map("products")
 }
@@ -100,4 +101,9 @@ enum roles {
     CUSTOMER
     MANAGER
     EMPLOYEE
+}
+
+enum productsStatus {
+    ACTIVE
+    DISABLED
 }

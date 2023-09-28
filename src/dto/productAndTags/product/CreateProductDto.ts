@@ -1,11 +1,11 @@
-import { ArrayMinSize, IsArray, IsDecimal, IsInt, IsNotEmpty, IsString } from "class-validator";
+import { ArrayMinSize, IsArray, IsNumber, IsInt, IsNotEmpty, IsString } from "class-validator";
 
 export class CreateProductDto {
     @IsNotEmpty()
     @IsString()
         title!: string;
 
-    @IsDecimal()
+    @IsNumber()
         price!: number;
 
     @IsString()

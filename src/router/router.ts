@@ -6,6 +6,8 @@ import { UserEmployeeController } from "../controllers/users/UserEmployee.contro
 import { UserCustomerController } from "../controllers/users/UserCustomer.controller";
 import { AddressController } from "../controllers/Address.controller";
 import { CreditCardController } from "../controllers/CreditCard.controller";
+import { ProductController } from "../controllers/productsAndTags/Product.controller";
+import { TagController } from "../controllers/productsAndTags/Tag.controller";
 const router = Router();
 
 router.use("/login", new LoginController().routes());
@@ -15,5 +17,7 @@ router.use("/customers", new UserCustomerController().routes());
 router.use("/universal", new UserUniversalController().routes());
 router.use("/address", new AddressController().routes());
 router.use("/credit-card", new CreditCardController().routes());
+router.use("/products", new ProductController().routes());
+router.use("/tags", new TagController().routes());
 
 export { router };

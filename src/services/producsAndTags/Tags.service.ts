@@ -3,7 +3,7 @@ import { CreateTagDto } from "../../dto/productAndTags/tag/CreateTagDto";
 
 const prisma = new PrismaClient();
 
-export class ProductService {
+export class TagService {
     public async createProduct (data: CreateTagDto) {
         await prisma.tag.create({
             data: {
