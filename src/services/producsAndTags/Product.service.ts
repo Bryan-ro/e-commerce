@@ -1,4 +1,6 @@
 import { PrismaClient } from "@prisma/client";
+import path from "path";
+import fs from "fs";
 import { CreateProductDto } from "../../dto/productAndTags/product/CreateProductDto";
 
 const prisma = new PrismaClient();
@@ -84,5 +86,35 @@ export class ProductService {
         });
 
         return { message: "Images successfully uploaded", statusCode: 201 };
+    }
+
+
+    public async deleteProduct (productId: number) {
+        const product = await prisma.product.findUnique({
+            where: {
+                id: productId
+            },
+            include: {
+                images: true
+            }
+        });
+
+        product?.images.map(image => {
+            fs.rmSync(path.join(__dirname, `../../../public/images/${image.url}`));
+        });
+
+        await prisma.image.deleteMany({
+            where: {
+                productId: productId
+            }
+        });
+
+        await prisma.product.delete({
+            where: {
+                id: productId
+            }
+        });
+
+        return { message: "Product successfully deleted", statusCode: 200 };
     }
 }

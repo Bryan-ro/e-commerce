@@ -2,6 +2,7 @@ import multer from "multer";
 import path from "path";
 import fs from "fs";
 import { v4 as uuid } from "uuid";
+import { AppError } from "../../errors/AppError";
 
 const storage = multer.diskStorage({
     destination(req, file, callback) {
@@ -25,6 +26,13 @@ const storage = multer.diskStorage({
 export const upload = multer({
     storage,
     limits: {
-        fileSize: 1 * 1024,     
-    }
+        fileSize: 0.8 * 1024 * 1024,     
+    },
+    fileFilter(req, file, callback) {
+        if(file.mimetype !== "image/png" && file.mimetype !== "image/jpeg") {
+            return callback(new AppError(`Invalid file type: ${file.mimetype} the file type must be image/png or image/jpeg`));
+        }
+
+        return callback(null, true);
+    },
 });

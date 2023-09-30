@@ -14,7 +14,7 @@ export const isCardExists = async (req: Request, res: Response, next: NextFuncti
     });
     
     if(!address) {
-        throw new AppError("Address does not exist", 400);
+        throw new AppError("Card does not exist", 400);
     }
 
     return next();

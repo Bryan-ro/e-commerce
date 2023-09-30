@@ -4,6 +4,7 @@ import { CreateProductDto } from "../../dto/productAndTags/product/CreateProduct
 import { isLoggedIn } from "../../middlewares/login/isLoggedIn.middleware";
 import { isManager } from "../../middlewares/users/roles/isManager.middleware";
 import { isValidData } from "../../middlewares/productAndTags/products/isValidData.middleware";
+import { isProductExists } from "../../middlewares/productAndTags/products/isProductExists.middleware";
 import { upload } from "../../middlewares/multerMiddleware/multer.middleware";
 
 const service = new ProductService();
@@ -13,7 +14,8 @@ export class ProductController {
     public routes () {
         router.get("/:page", this.getProducts);
         router.post("/create", isLoggedIn, isManager, isValidData, this.create);
-        router.post("/images/:id", isLoggedIn, isManager, upload.array("image"), this.uploadImages);
+        router.post("/images/:id", isLoggedIn, isManager, isProductExists, upload.array("image"), this.uploadImages);
+        router.delete("/:id", isLoggedIn, isManager, isProductExists, this.deleteProduct);
 
         return router;
     }
@@ -44,5 +46,13 @@ export class ProductController {
         const upload = await service.uploadImages(images as multerTypes.file[], productId);
 
         return res.status(upload.statusCode).json({ ...upload });
+    }
+
+    private async deleteProduct (req: Request, res: Response) {
+        const productId = +req.params.id;
+
+        const deletion = await service.deleteProduct(productId);
+
+        return res.status(deletion.statusCode).json({ ...deletion });
     }
 }
