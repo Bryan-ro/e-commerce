@@ -31,28 +31,24 @@ export class ProductService {
         const totalProducts = await prisma.product.count();
         const totalPages = Math.ceil(totalProducts / pageSize);
 
-        const productsArray: PrismaTypes.product[] = [];
-
-        products.map((product) => {
-            productsArray.push({
-                id: product.id,
-                title: product.title,
-                price: product.price,
-                description: product.description,
-                tags: product.tags.map(tag => {
-                    return tag.tag;
-                }),
-                images: product.images.map(image => {
-                    return `${serverUrl}/images/${image.url}`; 
-                })
-            });
-        });
-
         return {
             currentPage: page,
             totalPages: totalPages,
             totalProducts: totalProducts,
-            products: productsArray,
+            products: products.map((product) => {
+                return {
+                    id: product.id,
+                    title: product.title,
+                    price: product.price,
+                    description: product.description,
+                    tags: product.tags.map(tag => {
+                        return tag.tag;
+                    }),
+                    images: product.images.map(image => {
+                        return `${serverUrl}/images/${image.url}`; 
+                    })
+                };
+            }),
             statusCode: 200
         };
     }
