@@ -2,7 +2,7 @@ import { Request, Response, Router } from "express";
 import { CreditCardService } from "../services/CreditCard.service";
 import { TokenizeCardDto } from "../dto/creditCard/TokenizeCardDto";
 import { isLoggedIn } from "../middlewares/login/isLoggedIn.middleware";
-import { isValidData } from "../middlewares/creditCard/isValidData.middleware";
+import { isValidData } from "../middlewares/shared/isValidData.middleware";
 import { isUserHasAddress } from "../middlewares/creditCard/isUserHasAddress.middleware";
 import { isCreditCardAlreadyExistsInTheSameUser } from "../middlewares/creditCard/isCreditCardAlreadyExistsInTheSameUser.middleware";
 import { isCreditCardBelongsToUser } from "../middlewares/creditCard/isCreditCardBelongsToUser.middleware";
@@ -14,7 +14,7 @@ const router = Router();
 export class CreditCardController {
     public routes () {  
         router.get("/", isLoggedIn, this.getOwnCards);
-        router.post("/create", isLoggedIn, isUserHasAddress, isValidData, isCreditCardAlreadyExistsInTheSameUser, this.createCreditCard);
+        router.post("/create", isLoggedIn, isUserHasAddress, isValidData(TokenizeCardDto), isCreditCardAlreadyExistsInTheSameUser, this.createCreditCard);
         router.delete("/delete/:id", isLoggedIn, isCardExists, isCreditCardBelongsToUser, this.deleteCreditCard);
 
         return router;

@@ -1,6 +1,6 @@
 import { Request, Response, Router } from "express";
-import { isValidData } from "../../middlewares/login/isValidData.middleware";
-import { isValidDataForRecovery } from "../../middlewares/login/forgotPass/isValidDataForRecovery.middleware";
+import { isValidDataToLogin } from "../../middlewares/login/isValidDataToLogin.middleware";
+import { isValidData } from "../../middlewares/shared/isValidData.middleware";
 import { isValidLogin } from "../../middlewares/login/isValidLogin.middleware";
 import { LoginService } from "../../services/users/Auth.service";
 import { isUserExists } from "../../middlewares/login/forgotPass/isUserExists.middleware";
@@ -13,9 +13,9 @@ const router = Router();
 
 export class LoginController {
     public routes () {
-        router.post("/", isValidData, isValidLogin, this.login);
+        router.post("/", isValidDataToLogin, isValidLogin, this.login);
         router.post("/forgot-password/:login", isValidDataForRecoveryPassRequest, isUserExists, this.requestForgotPassword);
-        router.patch("/recovery-password", isValidDataForRecovery, isvalidCode, this.forgotPasswordChange);
+        router.patch("/recovery-password", isValidData(RecoveryPassDto), isvalidCode, this.forgotPasswordChange);
         
         return router;
     }

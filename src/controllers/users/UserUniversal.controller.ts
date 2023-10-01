@@ -1,8 +1,7 @@
 import { Request, Response, Router } from "express";
 import { UserUniversalService } from "../../services/users/UserUniversal.service";
 import { UpdatePersonalDataDto } from "../../dto/user/UpdatePersonalDataDto";
-import { isValidDataPersonalUpdate } from "../../middlewares/users/universal/update/isValidDataPersonalUpdate.middleware";
-import { isValidDataForUpdatePassword } from "../../middlewares/users/universal/update/updatePassword/isValidDataForUpdatePass.middleware";
+import { isValidData } from "../../middlewares/shared/isValidData.middleware";
 import { isLoggedIn } from "../../middlewares/login/isLoggedIn.middleware";
 import { isNotEmployee } from "../../middlewares/users/roles/isNotEmployee.middleware";
 import { isUserExists } from "../../middlewares/users/universal/get/isUserExists.middleware";
@@ -11,6 +10,7 @@ import { isNotOwnUser } from "../../middlewares/users/roles/isNotOwnUser.middlew
 import { UpdatePasswordDto } from "../../dto/user/UpdatePasswordDto";
 import { isValidCurrentPassword } from "../../middlewares/users/universal/update/updatePassword/isValidCurrentPassword.middleware";
 import { isFilterValid } from "../../middlewares/users/universal/get/isFilterIsValid.middleware";
+import { isPageANumber } from "../../middlewares/shared/isPageANumber.middleware";
 
 const service = new UserUniversalService();
 const router = Router();
@@ -19,9 +19,9 @@ export class UserUniversalController {
     public routes () {
         router.get("/get-user/:id", isLoggedIn, isManager, isUserExists, this.getOneUser);
         router.get("/get-own-profile", isLoggedIn, this.getOwnUser);
-        router.get("/get-filter", isLoggedIn, isManager, isFilterValid, this.getUserByRoleAndIsActiveFilter);
-        router.patch("/update-personal-data", isLoggedIn, isNotEmployee, isValidDataPersonalUpdate, this.updatePersonalData);
-        router.patch("/update-own-password", isLoggedIn, isValidDataForUpdatePassword, isValidCurrentPassword, this.updateOwnPassword);
+        router.get("/get-filter/:page", isLoggedIn, isManager, isPageANumber, isFilterValid, this.getUserByRoleAndIsActiveFilter);
+        router.patch("/update-personal-data", isLoggedIn, isNotEmployee, isValidData(UpdatePersonalDataDto), this.updatePersonalData);
+        router.patch("/update-own-password", isLoggedIn, isValidData(UpdatePasswordDto), isValidCurrentPassword, this.updateOwnPassword);
         router.put("/disable/:id", isLoggedIn, isManager, isUserExists, isNotOwnUser, this.disable);
         router.put("/active/:id", isLoggedIn, isManager, isUserExists, this.active);
 
@@ -30,9 +30,10 @@ export class UserUniversalController {
 
     private async getUserByRoleAndIsActiveFilter (req: Request, res: Response) {
         const { isActive, role } = req.query;
-        const isActiveBoll = isActive === "false" ?  false : true;
+        const page = +req.params.page;
+        const isActiveBol = isActive === "false" ?  false : true;
 
-        const users = await service.getUserByRoleAndIsActiveFilter(role as "MANAGER" | "CUSTOMER" | "EMPLOYEE", isActiveBoll);
+        const users = await service.getUserByRoleAndIsActiveFilter(role as "MANAGER" | "CUSTOMER" | "EMPLOYEE", isActiveBol, page);
 
         return res.status(users.statusCode).json({ ...users });
     }

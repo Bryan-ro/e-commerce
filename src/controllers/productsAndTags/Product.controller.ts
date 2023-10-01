@@ -3,17 +3,18 @@ import { ProductService } from "../../services/producsAndTags/Product.service";
 import { CreateProductDto } from "../../dto/productAndTags/product/CreateProductDto";
 import { isLoggedIn } from "../../middlewares/login/isLoggedIn.middleware";
 import { isManager } from "../../middlewares/users/roles/isManager.middleware";
-import { isValidData } from "../../middlewares/productAndTags/products/isValidData.middleware";
+import { isValidData } from "../../middlewares/shared/isValidData.middleware";
 import { isProductExists } from "../../middlewares/productAndTags/products/isProductExists.middleware";
 import { upload } from "../../middlewares/multerMiddleware/multer.middleware";
+import { isPageANumber } from "../../middlewares/shared/isPageANumber.middleware";
 
 const service = new ProductService();
 const router = Router();
 
 export class ProductController {
     public routes () {
-        router.get("/:page", this.getProducts);
-        router.post("/create", isLoggedIn, isManager, isValidData, this.create);
+        router.get("/:page", isPageANumber, this.getProducts);
+        router.post("/create", isLoggedIn, isManager, isValidData(CreateProductDto), this.create);
         router.post("/images/:id", isLoggedIn, isManager, isProductExists, upload.array("image"), this.uploadImages);
         router.delete("/:id", isLoggedIn, isManager, isProductExists, this.deleteProduct);
 

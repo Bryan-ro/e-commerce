@@ -2,7 +2,7 @@ import { Response, Request, Router } from "express";
 import { UserManagerService } from "../../services/users/UserManager.service";
 import { CreateUserDto } from "../../dto/user/CreateUserDto";
 import { isUserAlreadyExists } from "../../middlewares/users/universal/create/isUserAlreadyExists.middleware";
-import { isValidData } from "../../middlewares/users/universal/create/isValidData.middleware";
+import { isValidData } from "../../middlewares/shared/isValidData.middleware";
 import { isLoggedIn } from "../../middlewares/login/isLoggedIn.middleware";
 import { isManager } from "../../middlewares/users/roles/isManager.middleware";
 
@@ -11,7 +11,7 @@ const router = Router();
 
 export class UserManagerController {
     public routes (): Router {
-        router.post("/create", isLoggedIn, isManager, isValidData, isUserAlreadyExists, this.create);
+        router.post("/create", isLoggedIn, isManager, isValidData(CreateUserDto), isUserAlreadyExists, this.create);
         
         return router;
     }

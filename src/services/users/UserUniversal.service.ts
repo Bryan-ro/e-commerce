@@ -8,8 +8,10 @@ const prisma = new PrismaClient();
 // Service for all types of users
 
 export class UserUniversalService {
-    public async getUserByRoleAndIsActiveFilter(role: "MANAGER" |  "EMPLOYEE" | "CUSTOMER", isActive: boolean) {
-        
+    public async getUserByRoleAndIsActiveFilter(role: "MANAGER" |  "EMPLOYEE" | "CUSTOMER", isActive: boolean, page: number) {
+        const pageSize = 20;
+        const offset = (page - 1) * pageSize;
+
         const users = await prisma.user.findMany({
             where: {
                 AND: [
@@ -25,10 +27,28 @@ export class UserUniversalService {
                 phone: true,
                 cpf: true,
                 role: true
+            },
+            take: pageSize,
+            skip: offset
+        });
+
+        const totalUsers = await prisma.user.count({
+            where: {
+                AND: [
+                    { role: role },
+                    { isActive: isActive }
+                ]
             }
         });
 
-        return { users, statusCode: 200 };
+
+        return {
+            currentPage: page,
+            totalPages: Math.ceil(totalUsers / pageSize),
+            totalUsers: totalUsers,
+            users, 
+            statusCode: 200 
+        };
     }
 
     public async getOneUser(id: number) {

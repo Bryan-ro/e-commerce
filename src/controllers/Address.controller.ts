@@ -3,7 +3,7 @@ import { AddressService } from "../services/Address.service";
 import { CreateAddressDto } from "../dto/address/CreateAdressDto";
 import { isLoggedIn } from "../middlewares/login/isLoggedIn.middleware";
 import { isValidAddress } from "../middlewares/address/isValidAddress.middleware";
-import { isValidData } from "../middlewares/address/isValidData.middleware";
+import { isValidData } from "../middlewares/shared/isValidData.middleware";
 import { isAddressExists } from "../middlewares/address/isAddressExists.middleware";
 import { isAddressBelongsToUser } from "../middlewares/address/isAddressBelongsToUser.middleware";
 
@@ -13,7 +13,7 @@ const router = Router();
 export class AddressController {
     public routes () {
         router.get("/", isLoggedIn, this.getOwnAddress);
-        router.post("/create", isLoggedIn, isValidData,  isValidAddress, this.create);
+        router.post("/create", isLoggedIn, isValidData(CreateAddressDto), isValidAddress, this.create);
         router.delete("/delete/:id", isLoggedIn, isAddressExists, isAddressBelongsToUser, this.delete);
 
         return router;

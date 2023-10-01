@@ -1,19 +1,19 @@
 import { Request, Response, NextFunction } from "express";
-import { CreateAddressDto } from "../../dto/address/CreateAdressDto";
+import { ClassConstructor } from "class-transformer";
 import { AppError } from "../../errors/AppError";
 import { ValidationConfig } from "../../validations/ValidationConfig";
 
 const validations = new ValidationConfig();
 
-export const isValidData = async (req: Request, res: Response, next: NextFunction) => {
-    const data: CreateAddressDto = req.body;
+export const isValidData = (dto: ClassConstructor<unknown>) => async function (req: Request, res: Response, next: NextFunction) {
+    const data = req.body;
     
+    const errors = await validations.validate(dto, data);
 
-    const errors = await validations.validate(CreateAddressDto, data);
-
-    if(errors.errors.length > 0) {
+    if (errors.errors.length > 0) {
         throw new AppError("Some values are not valid", 400, errors);   
     }
 
     return next();
 };
+

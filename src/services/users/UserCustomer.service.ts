@@ -28,6 +28,6 @@ export class UserCustomerService {
             }
         });
 
-        return { message: "Employee created successfully", statusCode: 201 };
+        return { message: "Costumer created successfully", statusCode: 201 };
     }
 }
