@@ -45,7 +45,7 @@ export class UserUniversalService {
         return {
             currentPage: page,
             totalPages: Math.ceil(totalUsers / pageSize),
-            totalUsers: totalUsers,
+            totalResults: totalUsers,
             users, 
             statusCode: 200 
         };
