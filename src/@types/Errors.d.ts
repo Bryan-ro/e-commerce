@@ -5,4 +5,10 @@ declare namespace Errors {
             target: string;
         }
     }
+
+    interface stripe {
+        raw: {
+            code: string;
+        }
+    }
 }

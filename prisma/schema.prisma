@@ -11,20 +11,17 @@ datasource db {
 }
 
 model User {
-    id         Int          @id @default(autoincrement())
-    name       String
-    username   String       @unique
-    cpf        String       @unique
-    email      String       @unique
-    role       roles        @default(CUSTOMER)
-    phone      String       @unique @db.VarChar(15)
-    password   String
-    isActive   Boolean      @default(true)
-    asaasId    String       @unique
-    addresses  Address[]
-    credits    CreditCard[]
-    orderItems OrderItem[]
-    Product    Product[]
+    id        Int       @id @default(autoincrement())
+    name      String
+    username  String    @unique
+    cpf       String    @unique
+    email     String    @unique
+    role      roles     @default(CUSTOMER)
+    phone     String    @unique @db.VarChar(15)
+    password  String
+    isActive  Boolean   @default(true)
+    addresses Address[]
+    Product   Product[]
 
     @@map("users")
 }
@@ -42,16 +39,6 @@ model Address {
     user         User    @relation(fields: [userId], references: [id])
 }
 
-model CreditCard {
-    id             Int    @id @default(autoincrement())
-    cardToken      String
-    lastCardDigits String
-    userId         Int
-    user           User   @relation(fields: [userId], references: [id])
-
-    @@map("credit_cards")
-}
-
 model Product {
     id          Int            @id @default(autoincrement())
     title       String
@@ -62,7 +49,7 @@ model Product {
     createdBy   User           @relation(fields: [userId], references: [id])
     tags        Tag[]
     images      Image[]
-    orderItems  OrderItem[]
+    OrderItem   OrderItem[]
 
     @@map("products")
 }
@@ -84,17 +71,45 @@ model Image {
     @@map("images")
 }
 
+model Order {
+    id             Int            @id @default(autoincrement())
+    OrderItem      OrderItem[]
+    deliveryPrice  Float
+    totalAmount    Float
+    paymentId      Int?           @unique
+    paymentStatus  paymentStatus
+    deliveryStatus deliveryStatus
+    addressId      Int            @unique
+
+
+    address        OrderAddress   @relation(fields: [addressId], references: [id])
+    
+    @@map("orders")
+}
+
 model OrderItem {
-    id             Int     @id @default(autoincrement())
-    productId      Int
-    stack          Int
-    userId         Int
-    payment_method String
-    payment_data   Int
-    user           User    @relation(fields: [userId], references: [id])
-    product        Product @relation(fields: [productId], references: [id])
+    id        Int     @id @default(autoincrement())
+    title     String
+    unitPrice Float
+    quantity  Int
+    productId Int
+    orderId   Int
+    order     Order   @relation(fields: [orderId], references: [id])
+    product   Product @relation(fields: [productId], references: [id])
 
     @@map("order_items")
+}
+
+model OrderAddress {
+    id           Int     @id @default(autoincrement())
+    cep          String
+    state        String
+    city         String
+    neighborhood String
+    street       String
+    number       Int
+    complement   String?
+    Order        Order?
 }
 
 enum roles {
@@ -106,4 +121,17 @@ enum roles {
 enum productsStatus {
     ACTIVE
     DISABLED
+}
+
+enum paymentStatus {
+    PENDING
+    APPROVED
+    REGECTED
+    REFUNDED
+}
+
+enum deliveryStatus {
+    PREPARING
+    TRAVELING
+    DELIVERED
 }

@@ -18,7 +18,7 @@ export class UserManagerController {
 
     private async create (req: Request, res: Response) {
         const user: CreateUserDto = req.body;
-        
+
         const creation = await service.create(user);
 
         return res.status(creation?.statusCode ?? 200).json({ ...creation });

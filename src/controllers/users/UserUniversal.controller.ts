@@ -11,19 +11,20 @@ import { UpdatePasswordDto } from "../../dto/user/UpdatePasswordDto";
 import { isValidCurrentPassword } from "../../middlewares/users/universal/update/updatePassword/isValidCurrentPassword.middleware";
 import { isFilterValid } from "../../middlewares/users/universal/get/isFilterIsValid.middleware";
 import { isPageANumber } from "../../middlewares/shared/isPageANumber.middleware";
+import { isIdParamANumber } from "../../middlewares/shared/isIdParamANumber.middleware";
 
 const service = new UserUniversalService();
 const router = Router();
 
 export class UserUniversalController {
     public routes () {
-        router.get("/get-user/:id", isLoggedIn, isManager, isUserExists, this.getOneUser);
+        router.get("/get-user/:id", isLoggedIn, isManager, isIdParamANumber, isUserExists, this.getOneUser);
         router.get("/get-own-profile", isLoggedIn, this.getOwnUser);
         router.get("/get-filter/:page", isLoggedIn, isManager, isPageANumber, isFilterValid, this.getUserByRoleAndIsActiveFilter);
-        router.patch("/update-personal-data", isLoggedIn, isNotEmployee, isValidData(UpdatePersonalDataDto), this.updatePersonalData);
+        router.put("/update-personal-data", isLoggedIn, isNotEmployee, isValidData(UpdatePersonalDataDto), this.updatePersonalData);
         router.patch("/update-own-password", isLoggedIn, isValidData(UpdatePasswordDto), isValidCurrentPassword, this.updateOwnPassword);
-        router.put("/disable/:id", isLoggedIn, isManager, isUserExists, isNotOwnUser, this.disable);
-        router.put("/active/:id", isLoggedIn, isManager, isUserExists, this.active);
+        router.patch("/disable/:id", isLoggedIn, isManager, isIdParamANumber, isUserExists, isNotOwnUser, this.disable);
+        router.patch("/active/:id", isLoggedIn, isManager, isIdParamANumber, isUserExists, isNotOwnUser, this.active);
 
         return router;
     }

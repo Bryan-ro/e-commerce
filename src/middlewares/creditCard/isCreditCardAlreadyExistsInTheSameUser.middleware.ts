@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
 import { AppError } from "../../errors/AppError";
-import { TokenizeCardDto } from "../../dto/creditCard/TokenizeCardDto";
+import { TokenizeCardDto } from "../../dto/creditCard/CardCreationDto";
 
 const prisma = new PrismaClient();
 

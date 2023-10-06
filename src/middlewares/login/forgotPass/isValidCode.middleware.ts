@@ -10,7 +10,7 @@ export const isvalidCode = async (req: Request, res: Response, next: NextFunctio
     const data: RecoveryPassDto = req.body;
 
     const token = get(data.login);
-    console.log(token);
+    
     const user = await prisma.user.findFirst({ 
         where: {
             OR: [
