@@ -7,16 +7,13 @@
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended"
     ],
-    "overrides": [
-    ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
     "plugins": [
-        "@typescript-eslint",
-        "import"
+        "@typescript-eslint"
     ],
     "rules": {
         "indent": [
@@ -35,9 +32,9 @@
             "error",
             "always"
         ],
-        "object-curly-spacing": 
-        ["error", "always"],
-        "import/order": 
-        ["error", { "groups": [["builtin", "external"], "internal", ["parent", "sibling", "index"]] }]
+        "object-curly-spacing": [
+            "error", 
+            "always"
+        ]
     }
 }

@@ -1,4 +1,4 @@
-import { ArrayMinSize, IsArray, IsNumber, IsInt, IsNotEmpty, IsString } from "class-validator";
+import { ArrayMinSize, IsArray, IsNumber, IsInt, IsNotEmpty, IsString, IsPositive } from "class-validator";
 
 export class CreateProductDto {
     @IsNotEmpty()
@@ -10,6 +10,10 @@ export class CreateProductDto {
 
     @IsString()
         description!: string;
+    
+    @IsInt()
+    @IsPositive()
+        stock!: number;
     
     @IsArray()
     @ArrayMinSize(1)

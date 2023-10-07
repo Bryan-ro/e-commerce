@@ -88,18 +88,18 @@ export class UserUniversalService {
     }
 
     public async updatePersonalData (id: number, data: UpdatePersonalDataDto) {
-        const user = await prisma.user.findUnique({ where: { id: id } });
+        // const user = await prisma.user.findUnique({ where: { id: id } });
 
         await prisma.user.update({
             where: {
                 id: id
             },
             data: {
-                name: data.name ?? user?.name,
-                username: data.username ?? user?.username,
-                cpf: data.cpf ?? user?.cpf,
-                email: data.email ?? user?.email,
-                phone: data.phone ?? user?.phone
+                name: data.name,
+                username: data.username,
+                cpf: data.cpf,
+                email: data.email,
+                phone: data.phone
             }
         });
 

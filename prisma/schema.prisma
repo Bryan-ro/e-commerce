@@ -44,6 +44,7 @@ model Product {
     title       String
     price       Float
     description String
+    stock       Int
     userId      Int
     status      productsStatus @default(ACTIVE)
     createdBy   User           @relation(fields: [userId], references: [id])
@@ -81,9 +82,8 @@ model Order {
     deliveryStatus deliveryStatus
     addressId      Int            @unique
 
+    address OrderAddress @relation(fields: [addressId], references: [id])
 
-    address        OrderAddress   @relation(fields: [addressId], references: [id])
-    
     @@map("orders")
 }
 

@@ -14,7 +14,7 @@ export class UserCustomerService {
                 email: user.email,
                 role: "CUSTOMER",
                 phone: user.phone,
-                password: await hash(user.password, 15)
+                password: await hash(user.password, 15) 
             }
         });
 
