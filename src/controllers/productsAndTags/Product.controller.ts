@@ -10,6 +10,7 @@ import { isTagExists } from "../../middlewares/productAndTags/products/isTagsExi
 import { isIdParamANumber } from "../../middlewares/shared/isIdParamANumber.middleware";
 import { UpdateProductDto } from "../../dto/productAndTags/product/updateProductDto";
 import { isEmployeeOrManager } from "../../middlewares/users/roles/isEmployeeOrManager.middleware";
+import { isImageFromProduct } from "../../middlewares/productAndTags/products/isImageFromProduct.middleware";
 
 const service = new ProductService();
 const router = Router();
@@ -20,6 +21,7 @@ export class ProductController {
         router.get("/:id", isIdParamANumber, isProductExists, this.getProductById);
         router.post("/create", isLoggedIn, isEmployeeOrManager, isValidData(CreateProductDto), isTagExists, this.create);
         router.post("/images/:id", isLoggedIn, isEmployeeOrManager, isProductExists, upload.array("image"), this.uploadImages);
+        router.delete("/images/:id/:imageUrl", isLoggedIn, isEmployeeOrManager, isIdParamANumber, isImageFromProduct, this.deleteImage);
         router.patch("/:id", isLoggedIn, isEmployeeOrManager, isIdParamANumber,  isProductExists, this.enableProduct);
         router.patch("/:id", isLoggedIn, isEmployeeOrManager, isIdParamANumber, isProductExists, this.disableProduct);
         router.put("/update/:id", isLoggedIn, isEmployeeOrManager, isIdParamANumber, isProductExists, this.updateProduct);
@@ -64,6 +66,14 @@ export class ProductController {
         const upload = await service.uploadImages(images as multerTypes.file[], productId);
 
         return res.status(upload.statusCode).json({ ...upload });
+    }
+
+    private async deleteImage (req: Request, res: Response) {
+        const { imageUrl, id } = req.params;
+
+        const deleting = await service.deleteImages(+id, imageUrl);
+
+        return res.status(deleting.statusCode).json({ ...deleting });
     }
 
     private async updateProduct (req: Request, res: Response) {

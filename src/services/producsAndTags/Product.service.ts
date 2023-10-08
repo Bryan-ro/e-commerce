@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { CreateProductDto } from "../../dto/productAndTags/product/CreateProductDto";
 import { UpdateProductDto } from "../../dto/productAndTags/product/updateProductDto";
+import path from "path";
+import fs from "fs";
 
 const prisma = new PrismaClient();
 
@@ -100,7 +102,7 @@ export class ProductService {
             }),
             images: product?.images.map(image => {
                 return {
-                    imageId: image.id,
+                    imageId: image.url,
                     imageUrl: `${serverUrl}/images/${image.url}`
                 }; 
             }),
@@ -140,6 +142,21 @@ export class ProductService {
         });
 
         return { message: "Images successfully uploaded", statusCode: 201 };
+    }
+
+    public async deleteImages (productId: number, imagesUrl: string) {
+        
+        fs.unlinkSync(path.join(__dirname, `./../../../public/images/${imagesUrl}`));
+
+        await prisma.image.delete({
+            where: {
+                url: imagesUrl,
+                productId: productId
+            }
+        });
+
+        return { message: "Image successfully deleted", statusCode: 200 };
+
     }
     
     public async updateProduct (productId: number, data: UpdateProductDto) {
