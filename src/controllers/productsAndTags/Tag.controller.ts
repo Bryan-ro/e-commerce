@@ -4,13 +4,14 @@ import { CreateTagDto } from "../../dto/productAndTags/tag/CreateTagDto";
 import { isLoggedIn } from "../../middlewares/login/isLoggedIn.middleware";
 import { isManager } from "../../middlewares/users/roles/isManager.middleware";
 import { isValidData } from "../../middlewares/shared/isValidData.middleware";
+import { isTagAlreadyExists } from "../../middlewares/productAndTags/tags/isTagAlreadyExists.middleware";
 
 const service = new TagService();
 const router = Router();
 
 export class TagController {
     public routes () {
-        router.post("/create", isLoggedIn, isManager, isValidData(CreateTagDto), this.create);
+        router.post("/create", isLoggedIn, isManager, isValidData(CreateTagDto), isTagAlreadyExists, this.create);
 
         return router;
     }

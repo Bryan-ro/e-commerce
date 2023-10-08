@@ -105,7 +105,7 @@ export class ProductService {
                     imageId: image.url,
                     imageUrl: `${serverUrl}/images/${image.url}`
                 }; 
-            }),
+            }),         
             statusCode: 200 
         };
     }
