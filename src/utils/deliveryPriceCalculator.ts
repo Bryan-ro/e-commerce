@@ -15,8 +15,11 @@ export function deliveryPriceCalculator(senderZipCode: unknown, destinationZipCo
             if(err) {
                 throw new AppError("Error to calculate the delivery price", 500);
             }
-            
-            resolve(+result.json.rows[0].elements[0].distance.text.replace("km", "") * productQuantity);
+            const filterResultKm = result.json.rows[0].elements[0].distance.text.replace("km", "");
+            const filterResultM = filterResultKm.replace("m", "");
+            const filterResult = filterResultM.replace(/,/g, "");
+
+            resolve(10 + (+filterResult * 0.01) * productQuantity);
         });
     });
 }

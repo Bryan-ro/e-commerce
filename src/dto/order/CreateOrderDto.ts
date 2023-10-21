@@ -6,9 +6,6 @@ interface orderItemProps {
 }
 
 export class CreateOrderDto {
-    @IsInt({
-        each: true
-    })
     @IsArray()
     @IsNotEmpty({
         each: true

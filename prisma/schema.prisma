@@ -22,6 +22,7 @@ model User {
     isActive  Boolean   @default(true)
     addresses Address[]
     Product   Product[]
+    Order     Order[]
 
     @@map("users")
 }
@@ -81,8 +82,10 @@ model Order {
     paymentStatus  paymentStatus
     deliveryStatus deliveryStatus
     addressId      Int            @unique
+    userId         Int
 
     address OrderAddress @relation(fields: [addressId], references: [id])
+    user    User         @relation(fields: [userId], references: [id])
 
     @@map("orders")
 }
@@ -90,7 +93,7 @@ model Order {
 model OrderItem {
     id        Int     @id @default(autoincrement())
     title     String
-    unitPrice Float
+    unit_price Float
     quantity  Int
     productId Int
     orderId   Int
