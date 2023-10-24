@@ -131,10 +131,12 @@ enum paymentStatus {
     APPROVED
     REGECTED
     REFUNDED
+    CANCELED
 }
 
 enum deliveryStatus {
     PREPARING
     TRAVELING
     DELIVERED
+    CANCELED
 }

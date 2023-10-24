@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, deliveryStatus, paymentStatus } from "@prisma/client";
 import { CreateOrderDto } from "../../dto/order/CreateOrderDto";
 import { deliveryPriceCalculator } from "../../utils/deliveryPriceCalculator";
 import mercadopago from "mercadopago";
@@ -56,7 +56,6 @@ export class OrderService {
         const { id, userId, ...addressNoId } = address;
 
         const deliveryPrice = Number(await deliveryPriceCalculator(`${process.env.ORIGIN_DELIVERY_ZIPCODE}`, address.cep, productQuantity));
-        console.log(deliveryPrice);
         
         const order = await prisma.order.create({
             data: {
@@ -84,9 +83,37 @@ export class OrderService {
                 name: findUser?.name,
                 email: findUser?.email
             },
-            external_reference: `${order.id}`
+            external_reference: `${order.id}`,
+            expires: true
         });
 
         return { preference: { items: preference.body.items, paymentLink: preference.body.init_point }, statusCode: 201 };
+    }
+
+    public async cancelOrder (orderId: number) {
+        const cancel = async (orderId: number) => {
+            await prisma.order.update({
+                where: {
+                    id: orderId
+                },
+                data: {
+                    paymentStatus: "CANCELED",
+                    deliveryStatus: "CANCELED"
+                }
+            });
+        };
+
+        const order = await prisma.order.findUnique({ where: { id: orderId } });
+        
+        if(order?.paymentStatus === "PENDING") {
+            await cancel(orderId);
+        } else if (order?.paymentId) {
+            const refund = await mercadopago.payment.refund(order?.paymentId);
+
+            console.log(refund);
+            await cancel(orderId);
+        }
+
+        return { statusCode: 200, message: "Order successfully canceled" };
     }
 }
