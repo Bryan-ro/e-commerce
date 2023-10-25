@@ -1,4 +1,4 @@
-import { PrismaClient, deliveryStatus, paymentStatus } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { CreateOrderDto } from "../../dto/order/CreateOrderDto";
 import { deliveryPriceCalculator } from "../../utils/deliveryPriceCalculator";
 import mercadopago from "mercadopago";
@@ -84,7 +84,8 @@ export class OrderService {
                 email: findUser?.email
             },
             external_reference: `${order.id}`,
-            expires: true
+            expires: true,
+            notification_url: "https://e7dc-2804-431-cfcb-bce6-f93b-c4c8-829e-9639.ngrok-free.app/payment/capture"
         });
 
         return { preference: { items: preference.body.items, paymentLink: preference.body.init_point }, statusCode: 201 };
@@ -107,7 +108,7 @@ export class OrderService {
         
         if(order?.paymentStatus === "PENDING") {
             await cancel(orderId);
-        } else if (order?.paymentId) {
+        } else if (order?.paymentStatus === "APPROVED" && order?.paymentId) {
             const refund = await mercadopago.payment.refund(order?.paymentId);
 
             console.log(refund);
